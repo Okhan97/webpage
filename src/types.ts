@@ -2,7 +2,7 @@ export type CompanyInfo = {
   logo: string;
   name: string;
   location: string;
-  description: string;
+  description: React.ReactNode;
   charge: string;
   url: string;
   date: {

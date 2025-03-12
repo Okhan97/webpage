@@ -39,7 +39,7 @@ const Home = () => {
 
   return (
     <div className="px-12 lg:px-32 py-8 md:py-12">
-      <div className="flex flex-col gap-6">
+      <div className="flex flex-col gap-8">
         <div className="flex flex-col lg:flex-row justify-evenly gap-4">
           <div className="flex flex-col gap-4">
             <div className="flex flex-col gap-1">
@@ -66,8 +66,22 @@ const Home = () => {
               Always eager to learn, adapt and improve as a professional. <br />
               This is my personal webpage where I share a bit about myself!
             </p>
+            <div className="italic text-lg hidden lg:visible lg:text-xl text-gray-300 justify-center lg:flex flex-col items-center m-auto">
+              <p>
+                The question is never{" "}
+                <span className="block lg:inline font-semibold text-primary">
+                  ”can it be done?”
+                </span>
+              </p>
+              <p>
+                The question is{" "}
+                <span className="block lg:inline font-semibold text-primary">
+                  ”is it worth the time?”
+                </span>
+              </p>
+            </div>
           </div>
-          <div className="relative">
+          <div className="relative flex flex-col gap-4">
             <Image
               src="/main-photo.jpg"
               alt="profile photo"
@@ -75,10 +89,24 @@ const Home = () => {
               width={500}
               height={0}
             />
+            <div className="italic text-lg lg:hidden text-gray-300 justify-center flex flex-col items-center m-auto">
+              <p>
+                The question is never{" "}
+                <span className="block lg:inline font-semibold text-primary">
+                  ”can it be done?”
+                </span>
+              </p>
+              <p>
+                The question is{" "}
+                <span className="block lg:inline font-semibold text-primary">
+                  ”is it worth the time?”
+                </span>
+              </p>
+            </div>
           </div>
         </div>
         <div className="flex flex-col gap-2">
-          <h1 className="text-xl">Work Experience</h1>
+          <h1 className="text-xl lg:text-2xl">Work Experience</h1>
           <hr />
           {COMPANY_INFO_LIST.toReversed().map((company) => (
             <CompanyBox key={company.name} {...company} />
