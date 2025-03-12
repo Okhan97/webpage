@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { Roboto } from "next/font/google";
+import Footer from "@/components/Footer";
 
 const roboto = Roboto({
   subsets: ["latin"],
@@ -34,7 +35,10 @@ const RootLayout = ({
   children: React.ReactNode;
 }>) => (
   <html lang="en">
-    <body className={roboto.className}>{children}</body>
+    <body className={roboto.className}>
+      {children}
+      <Footer />
+    </body>
   </html>
 );
 

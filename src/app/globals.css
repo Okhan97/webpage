@@ -16,8 +16,20 @@
   }
 
   .border-primary {
-    border: 1px solid;
     border-color: var(--primary);
+  }
+
+  .text-foreground {
+    color: var(--foreground);
+  }
+
+  .bg-foreground {
+    background-color: var(--foreground);
+  }
+
+  .border-foreground {
+    border: 1px solid;
+    border-color: var(--foreground);
   }
 }
 

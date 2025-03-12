@@ -37,6 +37,23 @@ const Home = () => {
     return () => clearTimeout(timeout);
   }, [displayedText, isDeleting, wordIndex]);
 
+  const phrase = (
+    <>
+      <p>
+        The question is never{" "}
+        <span className="block lg:inline font-semibold text-primary">
+          ”can it be done?”
+        </span>
+      </p>
+      <p>
+        The question is{" "}
+        <span className="block lg:inline font-semibold text-primary">
+          ”is it worth the time?”
+        </span>
+      </p>
+    </>
+  );
+
   return (
     <div className="px-12 lg:px-32 py-8 md:py-12">
       <div className="flex flex-col gap-8">
@@ -67,18 +84,7 @@ const Home = () => {
               This is my personal webpage where I share a bit about myself!
             </p>
             <div className="italic text-lg hidden lg:visible lg:text-xl text-gray-300 justify-center lg:flex flex-col items-center m-auto">
-              <p>
-                The question is never{" "}
-                <span className="block lg:inline font-semibold text-primary">
-                  ”can it be done?”
-                </span>
-              </p>
-              <p>
-                The question is{" "}
-                <span className="block lg:inline font-semibold text-primary">
-                  ”is it worth the time?”
-                </span>
-              </p>
+              {phrase}
             </div>
           </div>
           <div className="relative flex flex-col gap-4">
@@ -90,18 +96,7 @@ const Home = () => {
               height={0}
             />
             <div className="italic text-lg lg:hidden text-gray-300 justify-center flex flex-col items-center m-auto">
-              <p>
-                The question is never{" "}
-                <span className="block lg:inline font-semibold text-primary">
-                  ”can it be done?”
-                </span>
-              </p>
-              <p>
-                The question is{" "}
-                <span className="block lg:inline font-semibold text-primary">
-                  ”is it worth the time?”
-                </span>
-              </p>
+              {phrase}
             </div>
           </div>
         </div>
