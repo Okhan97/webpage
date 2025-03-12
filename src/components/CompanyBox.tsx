@@ -36,12 +36,14 @@ const CompanyBox: React.FC<CompanyInfo> = ({
           <p className="text-sm">{location}</p>
         </div>
       </div>
-      <div className="flex gap-4">
-        <div className="h-100% border-foreground border-l-2" />
-        <div className="text-sm flex flex-col gap-1 max-w-[50rem]">
-          {description.map((d) => d)}
+      {description != null && (
+        <div className="flex gap-4">
+          <div className="h-100% border-foreground border-l-2" />
+          <div className="text-sm flex flex-col gap-1 max-w-[50rem]">
+            {description.map((d) => d)}
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };

@@ -3,7 +3,7 @@ import CompanyBox from "@/components/CompanyBox";
 import { Tooltip } from "@mui/material";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import { COMPANY_INFO_LIST } from "./constants";
+import { COMPANY_INFO_LIST, EDUCATION_INFO_LIST } from "./constants";
 
 const words = ["Frontend", "Fullstack", "Software"];
 const maxLength = Math.max(...words.map((word) => word.length));
@@ -104,6 +104,13 @@ const Home = () => {
           <h1 className="text-xl lg:text-2xl">Work Experience</h1>
           <hr />
           {COMPANY_INFO_LIST.toReversed().map((company) => (
+            <CompanyBox key={company.name} {...company} />
+          ))}
+        </div>
+        <div className="flex flex-col gap-2">
+          <h1 className="text-xl lg:text-2xl">Education</h1>
+          <hr />
+          {EDUCATION_INFO_LIST.toReversed().map((company) => (
             <CompanyBox key={company.name} {...company} />
           ))}
         </div>

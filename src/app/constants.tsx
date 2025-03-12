@@ -3,7 +3,7 @@ import { CompanyInfo } from "@/types";
 export const COMPANY_INFO_LIST: CompanyInfo[] = [
   {
     name: "Facebook",
-    logo: "/companies/facebook_logo.jpg",
+    logo: "/companies/fb_logo.jpg",
     location: "Palo Alto, California, USA",
     url: "https://about.meta.com/",
     charge: "Frontend Engineering Intern",
@@ -137,6 +137,33 @@ export const COMPANY_INFO_LIST: CompanyInfo[] = [
     date: {
       start: "Apr 2024",
       end: "Present",
+    },
+  },
+];
+
+export const EDUCATION_INFO_LIST: CompanyInfo[] = [
+  {
+    name: "Colegio de La Salle",
+    logo: "/companies/dls_logo.jpg",
+    location: "Santiago, Chile",
+    description: null,
+    charge: "Student",
+    url: "https://www.lasalle-lareina.cl/",
+    date: {
+      start: "Mar 2002",
+      end: "Dic 2014",
+    },
+  },
+  {
+    name: "Pontificia Universidad Católica de Chile",
+    logo: "/companies/puc_logo.jpg",
+    location: "Santiago, Chile",
+    description: null,
+    charge: "Bachelor's in Software Engineering",
+    url: "https://www.ing.uc.cl/",
+    date: {
+      start: "Mar 2015",
+      end: "Jul 2021",
     },
   },
 ];
