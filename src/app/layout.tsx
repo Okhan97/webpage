@@ -35,7 +35,7 @@ const RootLayout = ({
   children: React.ReactNode;
 }>) => (
   <html lang="en">
-    <body className={roboto.className}>
+    <body className={`min-w-full min-h-dvh ${roboto.className}`}>
       {children}
       <Footer />
     </body>

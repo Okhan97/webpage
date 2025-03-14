@@ -10,3 +10,9 @@ export type CompanyInfo = {
     end: string;
   };
 };
+
+export type Circle = {
+  x: number;
+  y: number;
+  r: number;
+};
