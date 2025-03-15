@@ -8,8 +8,9 @@ import { RefObject, useEffect, useRef, useState } from "react";
 import { drawCircles } from "./drawCircles";
 
 const MAX_CIRCLES = 2 ** 17;
-const COLOR_VARIATION = 50;
+const COLOR_VARIATION = 1000;
 const CIRCLE_RADIUS = 1;
+const INTERVAL_MS = 2000;
 
 const CanvasCircle = () => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -85,7 +86,7 @@ const CanvasCircle = () => {
   useEffect(() => {
     const interval = setInterval(() => {
       setColor(getSimilarRandomColor(color, COLOR_VARIATION));
-    }, 600);
+    }, INTERVAL_MS);
 
     return () => clearInterval(interval);
   }, []);

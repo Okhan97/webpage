@@ -1,5 +1,5 @@
 import { Circle } from "@/types";
-import { getOppositeColor } from "@/utils/colors";
+import { getSimilarRandomColor } from "@/utils/colors";
 import { RefObject } from "react";
 
 type DrawCirclesProps = {
@@ -18,7 +18,8 @@ export const drawCircles = ({
   circlesRefList.forEach((ref) => {
     ref.current.forEach(({ x, y, r }, i) => {
       let usedColor = color;
-      if (i % 2) usedColor = getOppositeColor(color);
+      if (i % 2) usedColor = getSimilarRandomColor(color, 50);
+      //   if (i % 2) usedColor = getOppositeColor(color);
       ctx.beginPath();
       ctx.arc(x, y, r, 0, Math.PI * 4);
       ctx.fillStyle = usedColor;
