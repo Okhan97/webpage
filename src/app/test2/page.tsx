@@ -7,7 +7,7 @@ import { RefObject, useEffect, useRef, useState } from "react";
 import { drawCircles } from "./drawCircles";
 import ControllerBar from "./ControllerBar";
 
-const MAX_CIRCLES = 2 ** 17;
+const MAX_CIRCLES = 2 ** 15;
 const COLOR_VARIATION = 100;
 
 const CanvasCircle = () => {
@@ -17,32 +17,16 @@ const CanvasCircle = () => {
   const [color, setColor] = useState(getRandomColor());
   const [iterateRandom, setIterateRandom] = useState(false);
 
-  //TODO: This 3 should be one state
-  const [showRed, setShowRed] = useState(true);
-  const [showGreen, setShowGreen] = useState(true);
-  const [showBlue, setShowBlue] = useState(true);
-
   const [nCircles, setNCircles] = useState(2 ** 7);
-  const circlesRef = useRef<Circle[]>([]);
-  const blueCirclesRef = useRef<Circle[]>([]);
+  const firstLayerRef = useRef<Circle[]>([]);
+  const secondLayerRef = useRef<Circle[]>([]);
+  const thirdLayerRef = useRef<Circle[]>([]);
 
   // Set starting circles
   useEffect(() => {
-    addNewCircles(nCircles, circlesRef, circleRadius);
+    addNewCircles(nCircles, firstLayerRef, circleRadius);
+    addNewCircles(nCircles, secondLayerRef, circleRadius);
   }, []);
-
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    if (typeof window === "undefined") return;
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-    drawCircles({
-      canvas,
-      circlesRefList: [circlesRef, blueCirclesRef],
-      color,
-    });
-  }, [color, nCircles, showBlue]);
 
   const addNewCircles = (
     prev: number,
@@ -61,18 +45,25 @@ const CanvasCircle = () => {
 
   useEffect(() => {
     const handleKeyPress = (e: KeyboardEvent) => {
-      if (e.code === "Space" || e.code === "KeyA") {
+      if (e.code === "Space") {
         setColor(getSimilarRandomColor(color, COLOR_VARIATION));
       }
       if (e.code === "ArrowDown") {
         setNCircles((prev) => {
           const newCount = Math.max(1, Math.floor(prev / 2));
-          circlesRef.current = circlesRef.current.slice(0, newCount);
+          firstLayerRef.current = firstLayerRef.current.slice(0, newCount);
+          secondLayerRef.current = secondLayerRef.current.slice(0, newCount);
+          thirdLayerRef.current = thirdLayerRef.current.slice(0, newCount);
           return newCount;
         });
       }
-      if (e.code === "ArrowUp")
-        setNCircles((prev) => addNewCircles(prev, circlesRef, circleRadius));
+      if (e.code === "ArrowUp") {
+        setNCircles((prev) => {
+          addNewCircles(prev, firstLayerRef, circleRadius);
+          addNewCircles(prev, secondLayerRef, circleRadius);
+          return addNewCircles(prev, thirdLayerRef, circleRadius);
+        });
+      }
     };
 
     window.addEventListener("keydown", handleKeyPress);
@@ -87,6 +78,19 @@ const CanvasCircle = () => {
 
     return () => clearInterval(interval);
   }, [color, intervalMs, iterateRandom]);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    if (typeof window === "undefined") return;
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    drawCircles({
+      canvas,
+      circlesRefList: [firstLayerRef, secondLayerRef, thirdLayerRef],
+      color,
+    });
+  }, [color, nCircles]);
 
   return (
     <div>
@@ -106,6 +110,10 @@ const CanvasCircle = () => {
         iterateRandom={{
           get: iterateRandom,
           set: setIterateRandom,
+        }}
+        nCircles={{
+          get: nCircles,
+          set: setNCircles,
         }}
       />
       <canvas

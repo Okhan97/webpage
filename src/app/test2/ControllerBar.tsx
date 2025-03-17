@@ -24,6 +24,10 @@ type ControllerBarProps = {
     get: boolean;
     set: Dispatch<SetStateAction<boolean>>;
   };
+  nCircles: {
+    get: number;
+    set: Dispatch<SetStateAction<number>>;
+  };
 };
 
 const ControllerBar = ({

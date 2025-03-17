@@ -15,9 +15,9 @@ export const drawCircles = ({
   const ctx = canvas.getContext("2d");
   if (!ctx) return;
   ctx.clearRect(0, 0, canvas.width, canvas.height);
+  let usedColor = color;
   circlesRefList.forEach((ref) => {
     ref.current.forEach(({ x, y, r }, i) => {
-      let usedColor = color;
       if (i % 2) usedColor = getSimilarRandomColor(color, 50);
       //   if (i % 2) usedColor = getOppositeColor(color);
       ctx.beginPath();
