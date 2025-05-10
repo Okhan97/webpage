@@ -1,7 +1,7 @@
 "use client";
 
 import { Circle } from "@/types";
-import { getRandomColor, getSimilarRandomColor } from "@/utils/colors";
+import { getRandomColor, getSimilarRandomColor } from "@/utils/color";
 import { randInt } from "@/utils/numbers";
 import { RefObject, useEffect, useRef, useState } from "react";
 import { drawCircles } from "./drawCircles";
@@ -12,17 +12,16 @@ const COLOR_VARIATION = 100;
 
 const CanvasCircle = () => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const [intervalMs, setIntervalMs] = useState(1000);
+  const [intervalMs, setIntervalMs] = useState(400);
   const [circleRadius, setCircleRadius] = useState(1);
   const [color, setColor] = useState(getRandomColor());
-  const [iterateRandom, setIterateRandom] = useState(false);
+  const [iterateRandom, setIterateRandom] = useState(true);
 
   const [nCircles, setNCircles] = useState(2 ** 7);
   const firstLayerRef = useRef<Circle[]>([]);
   const secondLayerRef = useRef<Circle[]>([]);
   const thirdLayerRef = useRef<Circle[]>([]);
 
-  // Set starting circles
   useEffect(() => {
     addNewCircles(nCircles, firstLayerRef, circleRadius);
     addNewCircles(nCircles, secondLayerRef, circleRadius);

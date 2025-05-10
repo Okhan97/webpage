@@ -107,7 +107,7 @@ export const COMPANY_INFO_LIST: CompanyInfo[] = [
   {
     name: "NeuralWorks",
     logo: "/companies/neuralworks_logo.jpg",
-    location: "Palo Alto, California",
+    location: "Pucón, Chile",
     url: "https://www.neuralworks.cl/",
     charge: "Fullstack Engineer",
     description: [

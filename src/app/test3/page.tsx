@@ -1,5 +1,5 @@
 "use client";
-import { generateColorFromSpeed } from "@/utils/colors";
+import { generateColorFromSpeed } from "@/utils/color";
 import { useEffect, useRef } from "react";
 
 const generateLayers = (

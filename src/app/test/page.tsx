@@ -44,7 +44,6 @@ const PsychedelicEffect = () => {
 
     draw();
 
-    // Mouse movement listener for 3D effect
     const handleMouseMove = (e: MouseEvent) => {
       const centerX = window.innerWidth / 2;
       const centerY = window.innerHeight / 2;

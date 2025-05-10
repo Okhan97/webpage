@@ -43,7 +43,7 @@ const ControllerBar = ({
       <div className="flex items-center">
         <Checkbox
           title="wena"
-          value={iterateRandom.get}
+          checked={iterateRandom.get}
           onChange={() => iterateRandom.set(!iterateRandom.get)}
         />
         <div>Iterate random color</div>
