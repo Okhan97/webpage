@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { Roboto } from "next/font/google";
 import Footer from "@/components/Footer";
+import { OverlayRipple } from "./Overlay";
 
 const roboto = Roboto({
   subsets: ["latin"],
@@ -35,7 +36,8 @@ const RootLayout = ({
   children: React.ReactNode;
 }>) => (
   <html lang="en">
-    <body className={`min-w-full min-h-dvh ${roboto.className}`}>
+    <body className={`min-w-full min-h-dvh max-h-dvh ${roboto.className}`}>
+      <OverlayRipple />
       {children}
       <Footer />
     </body>
