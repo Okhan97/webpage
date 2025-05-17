@@ -5,7 +5,7 @@ export const getRandomColor = (): string =>
 
 export const getSimilarRandomColor = (
   baseColor: string,
-  hueVariation: number = 15,
+  hueVariation: number = 10,
   satVariation: number = 10,
   lightVariation: number = 10
 ): string => {
@@ -95,7 +95,6 @@ export const generateColorFromSpeed = ({
 
   let normalizedSpeed = (speed - minSpeed) / (maxSpeed - minSpeed);
 
-  // Reverse the normalization if reverse === true
   if (reverse) {
     normalizedSpeed = 1 - normalizedSpeed;
   }

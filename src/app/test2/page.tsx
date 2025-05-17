@@ -8,7 +8,6 @@ import { drawCircles } from "./drawCircles";
 import ControllerBar from "./ControllerBar";
 
 const MAX_CIRCLES = 2 ** 15;
-const COLOR_VARIATION = 100;
 
 const CanvasCircle = () => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -45,7 +44,7 @@ const CanvasCircle = () => {
   useEffect(() => {
     const handleKeyPress = (e: KeyboardEvent) => {
       if (e.code === "Space") {
-        setColor(getSimilarRandomColor(color, COLOR_VARIATION));
+        setColor(getSimilarRandomColor(color));
       }
       if (e.code === "ArrowDown") {
         setNCircles((prev) => {
@@ -71,8 +70,7 @@ const CanvasCircle = () => {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      if (iterateRandom)
-        setColor(getSimilarRandomColor(color, COLOR_VARIATION));
+      if (iterateRandom) setColor(getSimilarRandomColor(color));
     }, intervalMs);
 
     return () => clearInterval(interval);
