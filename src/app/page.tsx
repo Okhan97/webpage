@@ -54,8 +54,18 @@ const Home = () => {
     </>
   );
 
+  document.addEventListener("mousemove", (e) => {
+    const x = e.clientX;
+    const y = e.clientY;
+    const overlay = document.getElementById("light-overlay");
+    if (overlay) {
+      overlay.style.background = `radial-gradient(circle at ${x}px ${y}px, rgba(255,255,255,0.1), transparent 70%)`;
+    }
+  });
+
   return (
     <div className="px-12 lg:px-32 py-8 md:py-12">
+      <div id="light-overlay"></div>
       <div className="flex flex-col gap-8">
         <div className="flex flex-col lg:flex-row justify-evenly gap-4">
           <div className="flex flex-col gap-4">
