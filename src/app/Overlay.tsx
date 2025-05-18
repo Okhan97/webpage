@@ -56,13 +56,13 @@ export const OverlayRipple = () => {
     <div className="fixed inset-0 z-50 pointer-events-none overflow-hidden flex items-center justify-center text-center">
       <div
         ref={textRef}
-        className="text-4xl lg:text-5xl font-bold absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-white z-10 pointer-events-none opacity-100 transition-opacity duration-[300ms] ease-in-out"
+        className="text-4xl lg:text-5xl font-bold absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-white z-10 pointer-events-none opacity-100 transition-opacity duration-[200ms] ease-in-out"
       >
         Ignacio Peñafiel
       </div>
       <div
         ref={overlayRef}
-        className="absolute top-1/2 left-1/2 w-[100vw] h-[100vw] bg-blue-500 rounded-full transform scale-[4] transition-transform duration-[800ms] ease-in-out -translate-x-1/2 -translate-y-1/2"
+        className="absolute top-1/2 left-1/2 w-[100vw] h-[100vw] bg-blue-500 rounded-full transform scale-[4] transition-transform duration-[600ms] ease-in-out -translate-x-1/2 -translate-y-1/2"
       />
     </div>
   );
