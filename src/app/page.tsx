@@ -37,6 +37,23 @@ const Home = () => {
     return () => clearTimeout(timeout);
   }, [displayedText, isDeleting, wordIndex]);
 
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      const x = e.clientX;
+      const y = e.clientY;
+      const overlay = document.getElementById("light-overlay");
+      if (overlay) {
+        overlay.style.background = `radial-gradient(circle at ${x}px ${y}px, rgba(255,255,255,0.1), transparent 70%)`;
+      }
+    };
+
+    document.addEventListener("mousemove", handleMouseMove);
+
+    return () => {
+      document.removeEventListener("mousemove", handleMouseMove);
+    };
+  }, []);
+
   const phrase = (
     <>
       <p>
@@ -56,6 +73,7 @@ const Home = () => {
 
   return (
     <div className="px-12 lg:px-32 py-8 md:py-12">
+      <div id="light-overlay"></div>
       <div className="flex flex-col gap-8">
         <div className="flex flex-col lg:flex-row justify-evenly gap-4">
           <div className="flex flex-col gap-4">
@@ -87,7 +105,7 @@ const Home = () => {
               {phrase}
             </div>
           </div>
-          <div className="relative flex flex-col gap-4">
+          <div className="relative flex flex-col gap-4 z-[1]">
             <Image
               src="/main-photo.jpg"
               alt="profile photo"
