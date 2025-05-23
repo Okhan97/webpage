@@ -107,14 +107,17 @@ const Home = () => {
               {phrase}
             </div>
           </div>
+
           <div className="relative flex flex-col gap-4 z-[1]">
-            <Image
-              src="/main-photo.jpg"
-              alt="profile photo"
-              className="rounded-lg object-cover"
-              width={500}
-              height={0}
-            />
+            <Tooltip title="OMG HE CAN FLOAT!">
+              <Image
+                src="/main-photo.jpg"
+                alt="profile photo"
+                className="rounded-lg object-cover  hover:border-primary transition-all duration-300 ease-in-out float-random"
+                width={500}
+                height={0}
+              />
+            </Tooltip>
             <div className="italic text-lg lg:hidden text-gray-300 justify-center flex flex-col items-center m-auto">
               {phrase}
             </div>

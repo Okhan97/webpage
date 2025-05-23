@@ -67,3 +67,53 @@ body {
     animation: scale-out 3s ease-in-out forwards;
   }
 }
+
+@keyframes float-random {
+  0% {
+    transform: translate(0px, 0px) rotate(0deg);
+  }
+
+  25% {
+    transform: translate(10px, -10px) rotate(-2deg);
+  }
+
+  50% {
+    transform: translate(-10px, 10px) rotate(2deg);
+  }
+
+  75% {
+    transform: translate(10px, 10px) rotate(-1deg);
+  }
+
+  100% {
+    transform: translate(0px, 0px) rotate(0deg);
+  }
+}
+
+@keyframes glow-shadow {
+  0%, 100% {
+    box-shadow:
+      0 8px 32px 0 rgba(49, 133, 252, 0.25),
+      0 1.5px 6px 0 rgba(0, 0, 0, 0.10),
+      0 0.5px 1.5px 0 rgba(49, 133, 252, 0.10);
+  }
+
+  50% {
+    box-shadow:
+      0 8px 48px 0 rgba(49, 133, 252, 0.55),
+      0 1.5px 12px 0 rgba(0, 0, 0, 0.18),
+      0 0.5px 3px 0 rgba(49, 133, 252, 0.22);
+  }
+}
+
+/* Base state: no animation, just smooth transition */
+.float-random {
+  transition: transform 0.5s ease, box-shadow 0.5s ease;
+}
+
+/* Hover: apply animations */
+.float-random:hover {
+  animation:
+    float-random 2s ease-in-out infinite,
+    glow-shadow 2s ease-in-out infinite;
+}
