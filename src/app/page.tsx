@@ -4,6 +4,7 @@ import { Tooltip } from "@mui/material";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { COMPANY_INFO_LIST, EDUCATION_INFO_LIST } from "./constants";
+import { ClickRipple } from "./ClickRipple";
 
 const words = ["Frontend", "Fullstack", "Software"];
 const maxLength = Math.max(...words.map((word) => word.length));
@@ -72,7 +73,8 @@ const Home = () => {
   );
 
   return (
-    <div className="px-12 lg:px-32 py-8 md:py-12">
+    <div className="px-12 lg:px-32 py-8 md:py-12 relative">
+      <ClickRipple />
       <div id="light-overlay"></div>
       <div className="flex flex-col gap-8">
         <div className="flex flex-col lg:flex-row justify-evenly gap-4">
@@ -105,14 +107,17 @@ const Home = () => {
               {phrase}
             </div>
           </div>
+
           <div className="relative flex flex-col gap-4 z-[1]">
-            <Image
-              src="/main-photo.jpg"
-              alt="profile photo"
-              className="rounded-lg object-cover"
-              width={500}
-              height={0}
-            />
+            <Tooltip title="OMG HE CAN FLOAT!">
+              <Image
+                src="/main-photo.jpg"
+                alt="profile photo"
+                className="rounded-lg object-cover  hover:border-primary transition-all duration-300 ease-in-out float-random"
+                width={500}
+                height={0}
+              />
+            </Tooltip>
             <div className="italic text-lg lg:hidden text-gray-300 justify-center flex flex-col items-center m-auto">
               {phrase}
             </div>
