@@ -1,6 +1,6 @@
 const AboutMe = () => {
   return (
-    <div className="">
+    <div className="flex flex-1">
       <h1>This is the about me page</h1>
     </div>
   );
