@@ -167,3 +167,5 @@ export const EDUCATION_INFO_LIST: CompanyInfo[] = [
     },
   },
 ];
+
+export const WEBPAGE_URL = "https://ignaciopenafiel.cl";

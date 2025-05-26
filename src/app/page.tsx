@@ -4,8 +4,8 @@ import { Tooltip } from "@mui/material";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { COMPANY_INFO_LIST, EDUCATION_INFO_LIST } from "./constants";
-import { ClickRipple } from "./ClickRipple";
-import { CursorHighlight } from "./CursorHighlight";
+import { ClickRipple } from "@/components/ClickRipple";
+import { CursorHighlight } from "@/components/CursorHighlight";
 
 const words = ["Frontend", "Fullstack", "Software"];
 const maxLength = Math.max(...words.map((word) => word.length));

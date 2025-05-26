@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
-import "./globals.css";
+import "@/styles/globals.css";
 import { Roboto } from "next/font/google";
 import Footer from "@/components/Footer";
-import { OverlayRipple } from "../components/Overlay";
-import { ClickRipple } from "./ClickRipple";
+import { OverlayRipple } from "@/components/EntryAnimation";
+import { ClickRipple } from "@/components/ClickRipple";
+import { WEBPAGE_URL } from "./constants";
 
 const roboto = Roboto({
   subsets: ["latin"],
@@ -18,7 +19,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Ignacio Peñafiel | Frontend Engineer",
     description: "Showcasing my software skills through this webpage",
-    url: "https://ignaciopenafiel.cl",
+    url: WEBPAGE_URL,
     images: [
       {
         url: "https://ignaciopenafiel.cl/ignacio-penafiel-og.jpg",
