@@ -19,7 +19,7 @@ import { RenderPass } from "three/examples/jsm/postprocessing/RenderPass";
 import { UnrealBloomPass } from "three/examples/jsm/postprocessing/UnrealBloomPass";
 import { createLightOrb } from "./components/LightOrb";
 
-const BASE_COLOR = "#b9b9b9";
+const BASE_COLOR = "#c4c4c4";
 
 const ORBIT_SPEED_WHITE = 0.006;
 const ORBIT_SPEED_ORANGE = 0.004;
