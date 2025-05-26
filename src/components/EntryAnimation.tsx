@@ -1,6 +1,5 @@
 "use client";
 
-import { usePathname } from "next/navigation";
 import { useEffect, useRef } from "react";
 
 export const OverlayFade = () => {
@@ -52,11 +51,6 @@ export const OverlayRipple = () => {
         overlay.removeEventListener("transitionend", onTransitionEnd);
     });
   }, []);
-
-  const pathname = usePathname();
-  const hideOverlay = pathname.includes("test");
-
-  if (hideOverlay) return null;
 
   return (
     <div className="fixed inset-0 z-50 pointer-events-none overflow-hidden flex items-center justify-center text-center">
