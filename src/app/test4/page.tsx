@@ -2,7 +2,6 @@
 import { useEffect, useRef } from "react";
 import {
   Scene,
-  PerspectiveCamera,
   WebGLRenderer,
   MeshStandardMaterial,
   Mesh,
@@ -17,16 +16,16 @@ import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer
 import { RenderPass } from "three/examples/jsm/postprocessing/RenderPass";
 import { UnrealBloomPass } from "three/examples/jsm/postprocessing/UnrealBloomPass";
 import { createLightOrb } from "./components/LightOrb";
+import { createCamera, setupCameraControls } from "./components/Camera";
 
 const BASE_COLOR = "#c4c4c4";
 
 let ORBIT_SPEED_WHITE = 0.006;
 let ORBIT_SPEED_ORANGE = 0.004;
-let CUBE_ROTATION_SPEED = 0.002;
+let PLANET_ROTATION_SPEED = 0.002;
+
 const ORBIT_RADIUS_WHITE = 3;
 const ORBIT_RADIUS_ORANGE = 5;
-
-const CAMERA_ROTATION_SPEED = 0.005;
 
 const Test4 = () => {
   const mountRef = useRef<HTMLDivElement>(null);
@@ -37,13 +36,14 @@ const Test4 = () => {
     if (!mount) return;
 
     const scene = new Scene();
-    const camera = new PerspectiveCamera(
-      75,
-      mount.clientWidth / mount.clientHeight,
-      0.1,
-      1000
-    );
-    camera.position.z = 3;
+    const camera = createCamera(mount.clientWidth / mount.clientHeight, {
+      x: 0,
+      y: 0,
+      z: 5,
+    });
+
+    const { updateCameraPosition, cleanup: cleanupCameraControls } =
+      setupCameraControls(camera, mount);
 
     const renderer = new WebGLRenderer({ antialias: true, alpha: true });
     renderer.setSize(mount.clientWidth, mount.clientHeight);
@@ -98,60 +98,32 @@ const Test4 = () => {
     let angleOrange = 0;
     let tiltAngle = 0;
 
-    let isDragging = false;
-    let previousMousePosition = { x: 0, y: 0 };
-    const cameraRotation = { x: 0, y: 0 };
-
-    const onMouseDown = (event: MouseEvent) => {
-      isDragging = true;
-      previousMousePosition = { x: event.clientX, y: event.clientY };
-    };
-
-    const onMouseMove = (event: MouseEvent) => {
-      if (!isDragging) return;
-
-      const deltaX = event.clientX - previousMousePosition.x;
-      const deltaY = event.clientY - previousMousePosition.y;
-
-      cameraRotation.x -= deltaY * CAMERA_ROTATION_SPEED;
-      cameraRotation.y -= deltaX * CAMERA_ROTATION_SPEED;
-
-      previousMousePosition = { x: event.clientX, y: event.clientY };
-    };
-    const onMouseUp = () => {
-      isDragging = false;
-    };
-
-    mount.addEventListener("mousedown", onMouseDown);
-    mount.addEventListener("mousemove", onMouseMove);
-    mount.addEventListener("mouseup", onMouseUp);
-
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === "ArrowUp") {
         ORBIT_SPEED_WHITE *= 1.2;
         ORBIT_SPEED_ORANGE *= 1.2;
-        CUBE_ROTATION_SPEED *= 1.2;
+        PLANET_ROTATION_SPEED *= 1.2;
       } else if (event.key === "ArrowDown") {
         ORBIT_SPEED_WHITE *= 0.8;
         ORBIT_SPEED_ORANGE *= 0.8;
-        CUBE_ROTATION_SPEED *= 0.8;
+        PLANET_ROTATION_SPEED *= 0.8;
       }
-      ORBIT_SPEED_WHITE = Math.min(0.06, ORBIT_SPEED_WHITE);
-      ORBIT_SPEED_ORANGE = Math.min(0.04, ORBIT_SPEED_ORANGE);
-      CUBE_ROTATION_SPEED = Math.min(0.02, CUBE_ROTATION_SPEED);
+
+      ORBIT_SPEED_WHITE = Math.min(ORBIT_SPEED_WHITE, 0.06);
+      ORBIT_SPEED_ORANGE = Math.min(ORBIT_SPEED_ORANGE, 0.04);
+      PLANET_ROTATION_SPEED = Math.min(PLANET_ROTATION_SPEED, 0.02);
     };
 
     window.addEventListener("keydown", handleKeyDown);
 
     let frameId: number;
     const animate = () => {
-      dodecahedron.rotation.x += CUBE_ROTATION_SPEED;
-      dodecahedron.rotation.y += CUBE_ROTATION_SPEED;
+      dodecahedron.rotation.x += PLANET_ROTATION_SPEED;
+      dodecahedron.rotation.y += PLANET_ROTATION_SPEED;
 
       angleWhite += ORBIT_SPEED_WHITE;
       angleOrange += ORBIT_SPEED_ORANGE;
       tiltAngle += 0.0005;
-
       if (lightOrbWhite?.updatePosition)
         lightOrbWhite.updatePosition(
           Math.cos(angleWhite) * ORBIT_RADIUS_WHITE,
@@ -167,10 +139,7 @@ const Test4 = () => {
         );
 
       // Update camera position
-      camera.position.x = Math.sin(cameraRotation.y) * 5;
-      camera.position.y = Math.sin(cameraRotation.x) * 5;
-      camera.position.z = Math.cos(cameraRotation.y) * 5;
-      camera.lookAt(0, 0, 0);
+      updateCameraPosition();
 
       composer.render();
       frameId = requestAnimationFrame(animate);
@@ -189,9 +158,8 @@ const Test4 = () => {
     return () => {
       cancelAnimationFrame(frameId);
       window.removeEventListener("resize", handleResize);
-      mount.removeEventListener("mousedown", onMouseDown);
-      mount.removeEventListener("mousemove", onMouseMove);
-      mount.removeEventListener("mouseup", onMouseUp);
+      window.removeEventListener("keydown", handleKeyDown);
+      cleanupCameraControls();
       renderer.dispose();
       mount.removeChild(renderer.domElement);
       geometry.dispose();
