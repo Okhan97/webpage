@@ -1,24 +1,12 @@
 "use client";
 import { useEffect, useRef } from "react";
-import {
-  Scene,
-  WebGLRenderer,
-  MeshStandardMaterial,
-  Mesh,
-  Vector2,
-  EdgesGeometry,
-  LineSegments,
-  LineBasicMaterial,
-  IcosahedronGeometry,
-  PointLight,
-} from "three";
+import { Scene, WebGLRenderer, Vector2 } from "three";
 import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer";
 import { RenderPass } from "three/examples/jsm/postprocessing/RenderPass";
 import { UnrealBloomPass } from "three/examples/jsm/postprocessing/UnrealBloomPass";
 import { createLightOrb } from "./components/LightOrb";
 import { createCamera, setupCameraControls } from "./components/Camera";
-
-const BASE_COLOR = "#c4c4c4";
+import { createPlanet } from "./components/Planet";
 
 let ORBIT_SPEED_WHITE = 0.006;
 let ORBIT_SPEED_ORANGE = 0.004;
@@ -56,41 +44,17 @@ const Test4 = () => {
 
     const bloomPass = new UnrealBloomPass(
       new Vector2(mount.clientWidth, mount.clientHeight),
-      1.5,
-      0.4,
-      0.85
+      2,
+      0.6,
+      0.9
     );
     composer.addPass(bloomPass);
 
-    const geometry = new IcosahedronGeometry(1, 2);
-    const material = new MeshStandardMaterial({
-      color: BASE_COLOR,
-      emissive: 0x000000,
-      emissiveIntensity: 0.1,
-    });
-    const dodecahedron = new Mesh(geometry, material);
+    const dodecahedron = createPlanet();
     scene.add(dodecahedron);
 
-    const edges = new EdgesGeometry(geometry);
-    const edgeMaterial = new LineBasicMaterial({ color: 0xffffff });
-    const edgeLines = new LineSegments(edges, edgeMaterial);
-    dodecahedron.add(edgeLines);
-
-    const vertices = geometry.attributes.position.array;
-    for (let i = 0; i < vertices.length; i += 3) {
-      if (Math.random() <= 0.05) {
-        const x = vertices[i];
-        const y = vertices[i + 1];
-        const z = vertices[i + 2];
-
-        const vertexLight = new PointLight("#3185FC", 0.2);
-        vertexLight.position.set(x, y, z);
-        dodecahedron.add(vertexLight);
-      }
-    }
-
     const lightOrbWhite = createLightOrb(0xffffff, 15);
-    const lightOrbOrange = createLightOrb(0xffaa00, 10);
+    const lightOrbOrange = createLightOrb(0xffaa00, 75);
     scene.add(lightOrbWhite);
     scene.add(lightOrbOrange);
 
@@ -162,8 +126,6 @@ const Test4 = () => {
       cleanupCameraControls();
       renderer.dispose();
       mount.removeChild(renderer.domElement);
-      geometry.dispose();
-      material.dispose();
     };
   }, []);
 
