@@ -6,7 +6,6 @@ import {
   WebGLRenderer,
   MeshStandardMaterial,
   Mesh,
-  DirectionalLight,
   Vector2,
   EdgesGeometry,
   LineSegments,
@@ -26,6 +25,8 @@ const ORBIT_SPEED_ORANGE = 0.004;
 const CUBE_ROTATION_SPEED = 0.002;
 const ORBIT_RADIUS_WHITE = 3;
 const ORBIT_RADIUS_ORANGE = 5;
+
+const CAMERA_ROTATION_SPEED = 0.005;
 
 const Test4 = () => {
   const mountRef = useRef<HTMLDivElement>(null);
@@ -70,46 +71,60 @@ const Test4 = () => {
     const dodecahedron = new Mesh(geometry, material);
     scene.add(dodecahedron);
 
-    // Add edges to the dodecahedron
     const edges = new EdgesGeometry(geometry);
     const edgeMaterial = new LineBasicMaterial({ color: 0xffffff });
     const edgeLines = new LineSegments(edges, edgeMaterial);
-    dodecahedron.add(edgeLines); // Attach edges to the dodecahedron
+    dodecahedron.add(edgeLines);
 
-    // Add a small light at each vertex of the icosahedron
     const vertices = geometry.attributes.position.array;
-    // 20% chance to execute
     for (let i = 0; i < vertices.length; i += 3) {
       if (Math.random() <= 0.05) {
         const x = vertices[i];
         const y = vertices[i + 1];
         const z = vertices[i + 2];
 
-        const vertexLight = new PointLight("#3185FC", 0.2); // Small light with low intensity and range
+        const vertexLight = new PointLight("#3185FC", 0.2);
         vertexLight.position.set(x, y, z);
         dodecahedron.add(vertexLight);
       }
     }
 
-    const movingLightWhite = new DirectionalLight(0xffffff, 1);
-    movingLightWhite.position.set(5, 0, 3);
-    scene.add(movingLightWhite);
-
-    const movingLightOrange = new DirectionalLight(0xffaa00, 1);
-    movingLightOrange.position.set(-5, 0, 3);
-    scene.add(movingLightOrange);
-
-    const lightOrbWhite = createLightOrb(0xffffff, 15); // White orb with stronger bloom
-    lightOrbWhite.position.copy(movingLightWhite.position);
+    const lightOrbWhite = createLightOrb(0xffffff, 15);
+    const lightOrbOrange = createLightOrb(0xffaa00, 10);
     scene.add(lightOrbWhite);
-
-    const lightOrbOrange = createLightOrb(0xffaa00, 10); // Orange orb with much stronger bloom
-    lightOrbOrange.position.copy(movingLightOrange.position);
     scene.add(lightOrbOrange);
 
     let angleWhite = 0;
     let angleOrange = 0;
     let tiltAngle = 0;
+
+    let isDragging = false;
+    let previousMousePosition = { x: 0, y: 0 };
+    const cameraRotation = { x: 0, y: 0 };
+
+    const onMouseDown = (event: MouseEvent) => {
+      isDragging = true;
+      previousMousePosition = { x: event.clientX, y: event.clientY };
+    };
+
+    const onMouseMove = (event: MouseEvent) => {
+      if (!isDragging) return;
+
+      const deltaX = event.clientX - previousMousePosition.x;
+      const deltaY = event.clientY - previousMousePosition.y;
+
+      cameraRotation.x -= deltaY * CAMERA_ROTATION_SPEED;
+      cameraRotation.y -= deltaX * CAMERA_ROTATION_SPEED;
+
+      previousMousePosition = { x: event.clientX, y: event.clientY };
+    };
+    const onMouseUp = () => {
+      isDragging = false;
+    };
+
+    mount.addEventListener("mousedown", onMouseDown);
+    mount.addEventListener("mousemove", onMouseMove);
+    mount.addEventListener("mouseup", onMouseUp);
 
     let frameId: number;
     const animate = () => {
@@ -120,21 +135,25 @@ const Test4 = () => {
       angleOrange += ORBIT_SPEED_ORANGE;
       tiltAngle += 0.0005;
 
-      movingLightWhite.position.x = Math.cos(angleWhite) * ORBIT_RADIUS_WHITE;
-      movingLightWhite.position.y =
-        Math.sin(tiltAngle) * ORBIT_RADIUS_WHITE * 0.5;
-      movingLightWhite.position.z = Math.sin(angleWhite) * ORBIT_RADIUS_WHITE;
+      if (lightOrbWhite?.updatePosition)
+        lightOrbWhite.updatePosition(
+          Math.cos(angleWhite) * ORBIT_RADIUS_WHITE,
+          Math.sin(tiltAngle) * ORBIT_RADIUS_WHITE * 0.5,
+          Math.sin(angleWhite) * ORBIT_RADIUS_WHITE
+        );
 
-      lightOrbWhite.position.copy(movingLightWhite.position);
+      if (lightOrbOrange?.updatePosition)
+        lightOrbOrange.updatePosition(
+          Math.cos(-angleOrange) * ORBIT_RADIUS_ORANGE,
+          Math.sin(-tiltAngle) * ORBIT_RADIUS_ORANGE * 0.5,
+          Math.sin(-angleOrange) * ORBIT_RADIUS_ORANGE
+        );
 
-      movingLightOrange.position.x =
-        Math.cos(-angleOrange) * ORBIT_RADIUS_ORANGE;
-      movingLightOrange.position.y =
-        Math.sin(-tiltAngle) * ORBIT_RADIUS_ORANGE * 0.5;
-      movingLightOrange.position.z =
-        Math.sin(-angleOrange) * ORBIT_RADIUS_ORANGE;
-
-      lightOrbOrange.position.copy(movingLightOrange.position);
+      // Update camera position
+      camera.position.x = Math.sin(cameraRotation.y) * 5;
+      camera.position.y = Math.sin(cameraRotation.x) * 5;
+      camera.position.z = Math.cos(cameraRotation.y) * 5;
+      camera.lookAt(0, 0, 0);
 
       composer.render();
       frameId = requestAnimationFrame(animate);
@@ -153,6 +172,9 @@ const Test4 = () => {
     return () => {
       cancelAnimationFrame(frameId);
       window.removeEventListener("resize", handleResize);
+      mount.removeEventListener("mousedown", onMouseDown);
+      mount.removeEventListener("mousemove", onMouseMove);
+      mount.removeEventListener("mouseup", onMouseUp);
       renderer.dispose();
       mount.removeChild(renderer.domElement);
       geometry.dispose();
