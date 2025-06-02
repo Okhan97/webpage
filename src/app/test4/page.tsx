@@ -20,9 +20,9 @@ import { createLightOrb } from "./components/LightOrb";
 
 const BASE_COLOR = "#c4c4c4";
 
-const ORBIT_SPEED_WHITE = 0.006;
-const ORBIT_SPEED_ORANGE = 0.004;
-const CUBE_ROTATION_SPEED = 0.002;
+let ORBIT_SPEED_WHITE = 0.006;
+let ORBIT_SPEED_ORANGE = 0.004;
+let CUBE_ROTATION_SPEED = 0.002;
 const ORBIT_RADIUS_WHITE = 3;
 const ORBIT_RADIUS_ORANGE = 5;
 
@@ -125,6 +125,23 @@ const Test4 = () => {
     mount.addEventListener("mousedown", onMouseDown);
     mount.addEventListener("mousemove", onMouseMove);
     mount.addEventListener("mouseup", onMouseUp);
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "ArrowUp") {
+        ORBIT_SPEED_WHITE *= 1.2;
+        ORBIT_SPEED_ORANGE *= 1.2;
+        CUBE_ROTATION_SPEED *= 1.2;
+      } else if (event.key === "ArrowDown") {
+        ORBIT_SPEED_WHITE *= 0.8;
+        ORBIT_SPEED_ORANGE *= 0.8;
+        CUBE_ROTATION_SPEED *= 0.8;
+      }
+      ORBIT_SPEED_WHITE = Math.min(0.06, ORBIT_SPEED_WHITE);
+      ORBIT_SPEED_ORANGE = Math.min(0.04, ORBIT_SPEED_ORANGE);
+      CUBE_ROTATION_SPEED = Math.min(0.02, CUBE_ROTATION_SPEED);
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
 
     let frameId: number;
     const animate = () => {
