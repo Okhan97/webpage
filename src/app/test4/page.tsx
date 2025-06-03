@@ -4,7 +4,7 @@ import { Scene, WebGLRenderer, Vector2 } from "three";
 import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer";
 import { RenderPass } from "three/examples/jsm/postprocessing/RenderPass";
 import { UnrealBloomPass } from "three/examples/jsm/postprocessing/UnrealBloomPass";
-import { createLightOrb } from "./components/LightOrb";
+import { createLightOrb, LightOrb } from "./components/LightOrb";
 import { createCamera, setupCameraControls } from "./components/Camera";
 import { createPlanet } from "./components/Planet";
 
@@ -12,8 +12,11 @@ let ORBIT_SPEED_WHITE = 0.006;
 let ORBIT_SPEED_ORANGE = 0.004;
 let PLANET_ROTATION_SPEED = 0.002;
 
+const MAX_RED_ORBS = 30;
 const ORBIT_RADIUS_WHITE = 3;
 const ORBIT_RADIUS_ORANGE = 5;
+const RED_ORB_ORBIT_SPEED_SLOW = 0.001;
+const RED_ORB_ORBIT_SPEED_FAST = 0.01;
 
 const Test4 = () => {
   const mountRef = useRef<HTMLDivElement>(null);
@@ -63,6 +66,12 @@ const Test4 = () => {
     let tiltAngle = 0;
     let isPaused = false;
 
+    const redOrbs: (LightOrb | undefined)[] = [];
+    const redOrbRadius = 1.5;
+    let redOrbGlobalAngle = 0;
+    let redOrbOrbitSpeed = RED_ORB_ORBIT_SPEED_SLOW;
+    let redOrbStep = 0;
+
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === "ArrowUp") {
         ORBIT_SPEED_WHITE *= 1.2;
@@ -74,6 +83,50 @@ const Test4 = () => {
         PLANET_ROTATION_SPEED *= 0.8;
       } else if (event.key === " ") {
         isPaused = !isPaused;
+      } else if (event.key === "ArrowRight") {
+        if (
+          redOrbs.length >= MAX_RED_ORBS &&
+          redOrbs.every((orb) => orb !== undefined)
+        )
+          return;
+        for (let i = 0; i < 3; i++) {
+          const orbIndex = (redOrbStep + i * 10) % MAX_RED_ORBS;
+          if (!redOrbs[orbIndex]) {
+            const redOrb = createLightOrb(0xff0000, 0.2, 0.7);
+            const angleOffset = (orbIndex / MAX_RED_ORBS) * Math.PI * 2;
+            redOrb.position.set(
+              Math.cos(angleOffset) * redOrbRadius,
+              0,
+              Math.sin(angleOffset) * redOrbRadius
+            );
+            redOrb.updatePosition = (x, y, z) => {
+              redOrb.position.set(x, y, z);
+            };
+
+            redOrbs[orbIndex] = redOrb;
+            scene.add(redOrb);
+          }
+        }
+        redOrbStep = (redOrbStep + 1) % 10;
+
+        if (redOrbs.filter(Boolean).length === MAX_RED_ORBS) {
+          redOrbOrbitSpeed = RED_ORB_ORBIT_SPEED_FAST;
+        }
+      } else if (event.key === "ArrowLeft") {
+        if (redOrbs.every((orb) => orb === undefined)) return;
+        for (let i = 0; i < 3; i++) {
+          const orbIndex =
+            (redOrbStep - 1 + i * 10 + MAX_RED_ORBS) % MAX_RED_ORBS;
+          const redOrb = redOrbs[orbIndex];
+          if (redOrb) {
+            scene.remove(redOrb);
+            redOrbs[orbIndex] = undefined;
+          }
+        }
+        redOrbStep = (redOrbStep - 1 + 10) % 10;
+
+        if (redOrbs.filter(Boolean).length < MAX_RED_ORBS)
+          redOrbOrbitSpeed = RED_ORB_ORBIT_SPEED_SLOW;
       }
 
       ORBIT_SPEED_WHITE = Math.min(ORBIT_SPEED_WHITE, 0.06);
@@ -106,9 +159,20 @@ const Test4 = () => {
             Math.sin(-tiltAngle) * ORBIT_RADIUS_ORANGE * 0.5,
             Math.sin(-angleOrange) * ORBIT_RADIUS_ORANGE
           );
+
+        redOrbGlobalAngle += redOrbOrbitSpeed;
+        redOrbs.forEach((redOrb, index) => {
+          if (redOrb) {
+            const angleOffset = (index / MAX_RED_ORBS) * Math.PI * 2;
+            redOrb.updatePosition!(
+              Math.cos(redOrbGlobalAngle + angleOffset) * redOrbRadius,
+              redOrb.position.y,
+              Math.sin(redOrbGlobalAngle + angleOffset) * redOrbRadius
+            );
+          }
+        });
       }
 
-      // Update camera position regardless of pause state
       updateCameraPosition();
 
       composer.render();

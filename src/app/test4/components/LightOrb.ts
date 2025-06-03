@@ -4,8 +4,12 @@ export type LightOrb = Mesh & {
   updatePosition?: (x: number, y: number, z: number) => void;
 };
 
-export const createLightOrb = (color: number, intensity: number): LightOrb => {
-  const geometry = new SphereGeometry(0.05, 16, 16);
+export const createLightOrb = (
+  color: number,
+  intensity: number,
+  size: number = 5 // Default size
+): LightOrb => {
+  const geometry = new SphereGeometry(size / 100, 16, 16); // Use size parameter
   const material = new MeshStandardMaterial({
     color,
     emissive: color,
