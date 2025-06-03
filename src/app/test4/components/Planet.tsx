@@ -9,9 +9,10 @@ import {
   Object3D,
 } from "three";
 
-export const createPlanet = (): Object3D => {
-  const BASE_COLOR = "#c4c4c4";
+const PERCENTAGE_OF_LIGHTS = 0.04;
+const BASE_COLOR = "#c4c4c4";
 
+export const createPlanet = (): Object3D => {
   const geometry = new IcosahedronGeometry(1, 2);
   const material = new MeshStandardMaterial({
     color: BASE_COLOR,
@@ -27,7 +28,7 @@ export const createPlanet = (): Object3D => {
 
   const vertices = geometry.attributes.position.array;
   for (let i = 0; i < vertices.length; i += 3) {
-    if (Math.random() <= 0.05) {
+    if (Math.random() <= PERCENTAGE_OF_LIGHTS) {
       const x = vertices[i];
       const y = vertices[i + 1];
       const z = vertices[i + 2];

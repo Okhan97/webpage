@@ -61,6 +61,7 @@ const Test4 = () => {
     let angleWhite = 0;
     let angleOrange = 0;
     let tiltAngle = 0;
+    let isPaused = false;
 
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === "ArrowUp") {
@@ -71,6 +72,8 @@ const Test4 = () => {
         ORBIT_SPEED_WHITE *= 0.8;
         ORBIT_SPEED_ORANGE *= 0.8;
         PLANET_ROTATION_SPEED *= 0.8;
+      } else if (event.key === " ") {
+        isPaused = !isPaused;
       }
 
       ORBIT_SPEED_WHITE = Math.min(ORBIT_SPEED_WHITE, 0.06);
@@ -82,27 +85,30 @@ const Test4 = () => {
 
     let frameId: number;
     const animate = () => {
-      dodecahedron.rotation.x += PLANET_ROTATION_SPEED;
-      dodecahedron.rotation.y += PLANET_ROTATION_SPEED;
+      if (!isPaused) {
+        dodecahedron.rotation.x += PLANET_ROTATION_SPEED;
+        dodecahedron.rotation.y += PLANET_ROTATION_SPEED;
 
-      angleWhite += ORBIT_SPEED_WHITE;
-      angleOrange += ORBIT_SPEED_ORANGE;
-      tiltAngle += 0.0005;
-      if (lightOrbWhite?.updatePosition)
-        lightOrbWhite.updatePosition(
-          Math.cos(angleWhite) * ORBIT_RADIUS_WHITE,
-          Math.sin(tiltAngle) * ORBIT_RADIUS_WHITE * 0.5,
-          Math.sin(angleWhite) * ORBIT_RADIUS_WHITE
-        );
+        angleWhite += ORBIT_SPEED_WHITE;
+        angleOrange += ORBIT_SPEED_ORANGE;
+        tiltAngle += 0.0005;
 
-      if (lightOrbOrange?.updatePosition)
-        lightOrbOrange.updatePosition(
-          Math.cos(-angleOrange) * ORBIT_RADIUS_ORANGE,
-          Math.sin(-tiltAngle) * ORBIT_RADIUS_ORANGE * 0.5,
-          Math.sin(-angleOrange) * ORBIT_RADIUS_ORANGE
-        );
+        if (lightOrbWhite?.updatePosition)
+          lightOrbWhite.updatePosition(
+            Math.cos(angleWhite) * ORBIT_RADIUS_WHITE,
+            Math.sin(tiltAngle) * ORBIT_RADIUS_WHITE * 0.5,
+            Math.sin(angleWhite) * ORBIT_RADIUS_WHITE
+          );
 
-      // Update camera position
+        if (lightOrbOrange?.updatePosition)
+          lightOrbOrange.updatePosition(
+            Math.cos(-angleOrange) * ORBIT_RADIUS_ORANGE,
+            Math.sin(-tiltAngle) * ORBIT_RADIUS_ORANGE * 0.5,
+            Math.sin(-angleOrange) * ORBIT_RADIUS_ORANGE
+          );
+      }
+
+      // Update camera position regardless of pause state
       updateCameraPosition();
 
       composer.render();
