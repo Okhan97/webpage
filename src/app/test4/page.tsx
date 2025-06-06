@@ -7,20 +7,24 @@ import { UnrealBloomPass } from "three/examples/jsm/postprocessing/UnrealBloomPa
 import { createLightOrb, LightOrb } from "./components/LightOrb";
 import { createCamera, setupCameraControls } from "./components/Camera";
 import { createPlanet } from "./components/Planet";
-
-let ORBIT_SPEED_WHITE = 0.006;
-let ORBIT_SPEED_ORANGE = 0.004;
-let PLANET_ROTATION_SPEED = 0.002;
-
-const MAX_RED_ORBS = 30;
-const ORBIT_RADIUS_WHITE = 3;
-const ORBIT_RADIUS_ORANGE = 5;
-const RED_ORB_ORBIT_SPEED_SLOW = 0.001;
-const RED_ORB_ORBIT_SPEED_FAST = 0.01;
+import {
+  MAX_RED_ORBS,
+  ORBIT_RADIUS_WHITE,
+  ORBIT_RADIUS_ORANGE,
+  RED_ORB_ORBIT_SPEED_SLOW,
+  RED_ORB_ORBIT_SPEED_FAST,
+  RED_ORB_RADIUS,
+  WHITE_ORB_STARTING_SPEED,
+  ORANGE_ORB_STARTING_SPEED,
+  PLANET_ROTATION_STARTING_SPEED,
+} from "./constants";
 
 const Test4 = () => {
   const mountRef = useRef<HTMLDivElement>(null);
   const rendererRef = useRef<WebGLRenderer | null>(null);
+  let whiteOrbSpeed = WHITE_ORB_STARTING_SPEED;
+  let orangeOrbSpeed = ORANGE_ORB_STARTING_SPEED;
+  let planetRotationSpeed = PLANET_ROTATION_STARTING_SPEED; // Starting speed for planet rotation
 
   useEffect(() => {
     const mount = mountRef.current;
@@ -74,13 +78,13 @@ const Test4 = () => {
 
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === "ArrowUp") {
-        ORBIT_SPEED_WHITE *= 1.2;
-        ORBIT_SPEED_ORANGE *= 1.2;
-        PLANET_ROTATION_SPEED *= 1.2;
+        whiteOrbSpeed *= 1.2;
+        orangeOrbSpeed *= 1.2;
+        planetRotationSpeed *= 1.2;
       } else if (event.key === "ArrowDown") {
-        ORBIT_SPEED_WHITE *= 0.8;
-        ORBIT_SPEED_ORANGE *= 0.8;
-        PLANET_ROTATION_SPEED *= 0.8;
+        whiteOrbSpeed *= 0.8;
+        orangeOrbSpeed *= 0.8;
+        planetRotationSpeed *= 0.8;
       } else if (event.key === " ") {
         isPaused = !isPaused;
       } else if (event.key === "ArrowRight") {
@@ -92,7 +96,7 @@ const Test4 = () => {
         for (let i = 0; i < 3; i++) {
           const orbIndex = (redOrbStep + i * 10) % MAX_RED_ORBS;
           if (!redOrbs[orbIndex]) {
-            const redOrb = createLightOrb(0xff0000, 0.2, 0.7);
+            const redOrb = createLightOrb(0xff0000, 0.2, RED_ORB_RADIUS);
             const angleOffset = (orbIndex / MAX_RED_ORBS) * Math.PI * 2;
             redOrb.position.set(
               Math.cos(angleOffset) * redOrbRadius,
@@ -129,9 +133,9 @@ const Test4 = () => {
           redOrbOrbitSpeed = RED_ORB_ORBIT_SPEED_SLOW;
       }
 
-      ORBIT_SPEED_WHITE = Math.min(ORBIT_SPEED_WHITE, 0.06);
-      ORBIT_SPEED_ORANGE = Math.min(ORBIT_SPEED_ORANGE, 0.04);
-      PLANET_ROTATION_SPEED = Math.min(PLANET_ROTATION_SPEED, 0.02);
+      whiteOrbSpeed = Math.min(whiteOrbSpeed, 0.06);
+      orangeOrbSpeed = Math.min(orangeOrbSpeed, 0.04);
+      planetRotationSpeed = Math.min(planetRotationSpeed, 0.02);
     };
 
     window.addEventListener("keydown", handleKeyDown);
@@ -139,11 +143,11 @@ const Test4 = () => {
     let frameId: number;
     const animate = () => {
       if (!isPaused) {
-        dodecahedron.rotation.x += PLANET_ROTATION_SPEED;
-        dodecahedron.rotation.y += PLANET_ROTATION_SPEED;
+        dodecahedron.rotation.x += planetRotationSpeed;
+        dodecahedron.rotation.y += planetRotationSpeed;
 
-        angleWhite += ORBIT_SPEED_WHITE;
-        angleOrange += ORBIT_SPEED_ORANGE;
+        angleWhite += whiteOrbSpeed;
+        angleOrange += orangeOrbSpeed;
         tiltAngle += 0.0005;
 
         if (lightOrbWhite?.updatePosition)
