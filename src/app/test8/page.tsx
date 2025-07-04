@@ -40,7 +40,7 @@ const Test8 = () => {
 
   return (
     <main
-      className="flex items-center justify-center h-screen transition-colors duration-100 relative"
+      className="flex items-center justify-center h-screen transition-colors duration-100 relative select-none"
       style={{ backgroundColor: bgColor }}
       onClick={handleClick}
     >
