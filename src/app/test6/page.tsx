@@ -1,4 +1,3 @@
-"use client";
 import { Parallax } from "react-scroll-parallax";
 
 const Page = () => {
