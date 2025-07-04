@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { COMPANY_INFO_LIST, EDUCATION_INFO_LIST } from "./constants";
 import { ClickRipple } from "@/components/ClickRipple";
 import { CursorHighlight } from "@/components/CursorHighlight";
+import { OverlayRipple } from "@/components/EntryAnimation";
 
 const words = ["Frontend", "Fullstack", "Software"];
 const maxLength = Math.max(...words.map((word) => word.length));
@@ -59,6 +60,7 @@ const Home = () => {
   return (
     <div className="px-12 lg:px-32 py-8 md:py-12 relative">
       <ClickRipple />
+      <OverlayRipple />
       <CursorHighlight />
       <div className="flex flex-col gap-8">
         <div className="flex flex-col lg:flex-row justify-evenly gap-4">

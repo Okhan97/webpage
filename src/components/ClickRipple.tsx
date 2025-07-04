@@ -64,7 +64,7 @@ export const ClickRipple = ({
 
     window.addEventListener("click", handleClick);
     return () => window.removeEventListener("click", handleClick);
-  }, [maxRipples]);
+  }, [maxRipples, rippleBorder, rippleSize, rippleTime]);
 
   return (
     <div

@@ -2,8 +2,6 @@ import type { Metadata } from "next";
 import "@/styles/globals.css";
 import { Roboto } from "next/font/google";
 import Footer from "@/components/Footer";
-import { OverlayRipple } from "@/components/EntryAnimation";
-import { ClickRipple } from "@/components/ClickRipple";
 import { WEBPAGE_URL } from "./constants";
 
 const roboto = Roboto({
@@ -40,8 +38,6 @@ const RootLayout = ({
     <body
       className={`flex flex-col min-w-full min-h-dvh max-h-dvh ${roboto.className}`}
     >
-      <OverlayRipple />
-      <ClickRipple />
       {children}
       <Footer />
     </body>
