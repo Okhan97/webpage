@@ -3,7 +3,6 @@ import "@/styles/globals.css";
 import { Roboto } from "next/font/google";
 import Footer from "@/components/Footer";
 import { WEBPAGE_URL } from "./constants";
-import { Providers } from "./providers";
 
 const roboto = Roboto({
   subsets: ["latin"],
@@ -39,10 +38,8 @@ const RootLayout = ({
     <body
       className={`flex flex-col min-w-full min-h-dvh max-h-dvh ${roboto.className}`}
     >
-      <Providers>
-        {children}
-        <Footer />
-      </Providers>
+      {children}
+      <Footer />
     </body>
   </html>
 );
