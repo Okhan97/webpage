@@ -1,0 +1,11 @@
+@keyframes shrinkToFit {
+    0% {
+        transform: scale(1.05);
+        opacity: 1;
+    }
+
+    100% {
+        transform: scale(1.25);
+        opacity: 0;
+    }
+}
