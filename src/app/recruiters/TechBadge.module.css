@@ -1,0 +1,13 @@
+@keyframes shadowPulse {
+    from {
+        box-shadow: 0 0 8px rgba(255, 215, 0, 0.4);
+    }
+
+    to {
+        box-shadow: 0 0 15px rgba(255, 215, 0, 0.8);
+    }
+}
+
+.shiny {
+    animation: shadowPulse 2s ease-in-out infinite alternate;
+}
