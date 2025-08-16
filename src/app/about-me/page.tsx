@@ -1,8 +1,24 @@
 import Image from "next/image";
+import Link from "next/link";
 
 const AboutMe = () => {
   return (
     <div className="flex flex-1 flex-col p-8 max-w-4xl mx-auto">
+      <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-8">
+        <Link
+          href="/"
+          className="bg-gray-600 hover:bg-gray-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors duration-200 text-center min-w-[160px]"
+        >
+          Home
+        </Link>
+        <Link
+          href="/recruiters"
+          className="bg-teal-600 hover:bg-teal-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors duration-200 text-center min-w-[160px]"
+        >
+          For Recruiters
+        </Link>
+      </div>
+
       <h1 className="text-4xl font-bold mb-8 text-center">About Me</h1>
 
       <div className="space-y-8">

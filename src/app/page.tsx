@@ -2,6 +2,7 @@
 import CompanyBox from "@/components/CompanyBox";
 import { Tooltip } from "@mui/material";
 import Image from "next/image";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import { COMPANY_INFO_LIST, EDUCATION_INFO_LIST } from "./constants";
 import { ClickRipple } from "@/components/ClickRipple";
@@ -109,6 +110,22 @@ const Home = () => {
             </div>
           </div>
         </div>
+
+        <div className="flex flex-col sm:flex-row gap-4 justify-center items-center my-8">
+          <Link
+            href="/about-me"
+            className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors duration-200 text-center min-w-[160px]"
+          >
+            About Me
+          </Link>
+          <Link
+            href="/recruiters"
+            className="bg-teal-600 hover:bg-teal-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors duration-200 text-center min-w-[160px]"
+          >
+            For Recruiters
+          </Link>
+        </div>
+
         <div className="flex flex-col gap-2">
           <h1 className="text-xl lg:text-2xl">Work Experience</h1>
           <hr />

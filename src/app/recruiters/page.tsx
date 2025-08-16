@@ -4,10 +4,26 @@ import {
   TOOLS_AND_DEVOPS,
 } from "./constants";
 import TechBadge from "./TechBadge";
+import Link from "next/link";
 
 const ForRecruiters = () => {
   return (
     <div className="flex flex-1 flex-col p-8 max-w-5xl mx-auto">
+      <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-8">
+        <Link
+          href="/"
+          className="bg-gray-600 hover:bg-gray-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors duration-200 text-center min-w-[160px]"
+        >
+          Home
+        </Link>
+        <Link
+          href="/about-me"
+          className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors duration-200 text-center min-w-[160px]"
+        >
+          About Me
+        </Link>
+      </div>
+
       <h1 className="text-4xl font-bold mb-8 text-center">For Recruiters</h1>
 
       <div className="space-y-8">
