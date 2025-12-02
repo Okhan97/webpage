@@ -1,4 +1,14 @@
-export const FRONTEND_TECHNOLOGIES = [
+const shinySort = (a: Technology, b: Technology) => {
+  if (a.isShiny === b.isShiny) return a.name.localeCompare(b.name);
+  return a.isShiny ? -1 : 1;
+};
+
+type Technology = {
+  name: string;
+  isShiny: boolean;
+};
+
+export const FRONTEND_TECHNOLOGIES: Technology[] = [
   { name: "React", isShiny: true },
   { name: "Next.js", isShiny: true },
   { name: "TypeScript", isShiny: true },
@@ -14,20 +24,22 @@ export const FRONTEND_TECHNOLOGIES = [
   { name: "Redux", isShiny: false },
   { name: "Mapbox", isShiny: false },
   { name: "HTML", isShiny: false },
-];
+  { name: "Angular", isShiny: false },
+].sort(shinySort);
 
-export const BACKEND_TECHNOLOGIES = [
+export const BACKEND_TECHNOLOGIES: Technology[] = [
   { name: "Node.js", isShiny: true },
   { name: "Python", isShiny: true },
+  { name: "Go", isShiny: false },
   { name: "FastAPI", isShiny: true },
   { name: "SQL", isShiny: false },
   { name: "MongoDB", isShiny: false },
   { name: "Django", isShiny: false },
   { name: "Jupyter Notebook", isShiny: false },
   { name: "Flask", isShiny: false },
-];
+].sort(shinySort);
 
-export const TOOLS_AND_DEVOPS = [
+export const TOOLS_AND_DEVOPS: Technology[] = [
   { name: "Git", isShiny: true },
   { name: "GitHub", isShiny: true },
   { name: "GCP", isShiny: true },
@@ -36,4 +48,4 @@ export const TOOLS_AND_DEVOPS = [
   { name: "Bitbucket", isShiny: false },
   { name: "Docker", isShiny: false },
   { name: "Vercel", isShiny: false },
-];
+].sort(shinySort);

@@ -124,6 +124,12 @@ const Home = () => {
           >
             For Recruiters
           </Link>
+          <Link
+            href="/all-tests"
+            className="bg-cyan-600 hover:bg-cyan-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors duration-200 text-center min-w-[160px]"
+          >
+            All Tests
+          </Link>
         </div>
 
         <div className="flex flex-col gap-2">
