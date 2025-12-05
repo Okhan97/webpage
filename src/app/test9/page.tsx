@@ -14,7 +14,8 @@ const Test9 = () => {
     cube: THREE.Mesh;
   } | null>(null);
 
-  const { alpha, beta, gamma } = useDeviceOrientation();
+  const { alpha, beta, gamma, permissionGranted, requestPermission } =
+    useDeviceOrientation();
 
   // Initialize Three.js scene
   useEffect(() => {
@@ -62,8 +63,18 @@ const Test9 = () => {
   }, [alpha, beta, gamma]);
 
   return (
-    <div className="flex flex-1 flex-col">
+    <div className="relative flex flex-1 flex-col">
       <canvas ref={canvasRef} />
+      {!permissionGranted && (
+        <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50">
+          <button
+            onClick={requestPermission}
+            className="px-6 py-3 bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-semibold"
+          >
+            Enable Motion Sensors
+          </button>
+        </div>
+      )}
     </div>
   );
 };
