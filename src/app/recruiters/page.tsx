@@ -1,3 +1,4 @@
+import { Tooltip } from "@mui/material";
 import {
   FRONTEND_TECHNOLOGIES,
   BACKEND_TECHNOLOGIES,
@@ -22,6 +23,15 @@ const ForRecruiters = () => {
         >
           About Me
         </Link>
+        <Tooltip title="Last updated on July 2025">
+          <a
+            href="/CV.pdf"
+            download
+            className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors duration-200 text-center min-w-[160px]"
+          >
+            Download CV
+          </a>
+        </Tooltip>
       </div>
 
       <h1 className="text-4xl font-bold mb-8 text-center">For Recruiters</h1>
