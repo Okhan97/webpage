@@ -1,59 +1,53 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import { COLORS } from "./constants";
+import { useDeviceMotion } from "@/utils/useDeviceMotion";
 
 const Test10 = () => {
   const [color, setColor] = useState(COLORS[0]);
   const [lastTapTime, setLastTapTime] = useState(0);
   const [colorHistory, setColorHistory] = useState<string[]>([COLORS[0].name]);
+  const { acceleration, permissionGranted, requestPermission } =
+    useDeviceMotion();
+  const lastAcceleration = useRef({ x: 0, y: 0, z: 0 });
 
+  const changeToRandomColor = useCallback(() => {
+    // Filter out the last 3 colors from the available options
+    const availableColors = COLORS.filter(
+      (c) => !colorHistory.slice(-3).includes(c.name)
+    );
+
+    // If somehow all colors are in history (shouldn't happen with 10 colors and 3 history)
+    // just use all colors
+    const colorsToChooseFrom =
+      availableColors.length > 0 ? availableColors : COLORS;
+
+    const randomIndex = Math.floor(Math.random() * colorsToChooseFrom.length);
+    const newColor = colorsToChooseFrom[randomIndex];
+
+    setColor(newColor);
+    setColorHistory((prev) => [...prev, newColor.name]);
+  }, [colorHistory]);
+
+  // Handle shake detection
   useEffect(() => {
-    const changeToRandomColor = () => {
-      // Filter out the last 3 colors from the available options
-      const availableColors = COLORS.filter(
-        (c) => !colorHistory.slice(-3).includes(c.name)
-      );
+    if (acceleration) {
+      const deltaX = Math.abs(acceleration.x - lastAcceleration.current.x);
+      const deltaY = Math.abs(acceleration.y - lastAcceleration.current.y);
+      const deltaZ = Math.abs(acceleration.z - lastAcceleration.current.z);
 
-      // If somehow all colors are in history (shouldn't happen with 10 colors and 3 history)
-      // just use all colors
-      const colorsToChooseFrom =
-        availableColors.length > 0 ? availableColors : COLORS;
-
-      const randomIndex = Math.floor(Math.random() * colorsToChooseFrom.length);
-      const newColor = colorsToChooseFrom[randomIndex];
-
-      setColor(newColor);
-      setColorHistory((prev) => [...prev, newColor.name]);
-    };
-    // Handle shake on mobile
-    let lastX = 0;
-    let lastY = 0;
-    let lastZ = 0;
-
-    const handleMotion = (event: DeviceMotionEvent) => {
-      const acceleration = event.accelerationIncludingGravity;
-      if (!acceleration) return;
-
-      const x = acceleration.x ?? 0;
-      const y = acceleration.y ?? 0;
-      const z = acceleration.z ?? 0;
-
-      const deltaX = Math.abs(x - lastX);
-      const deltaY = Math.abs(y - lastY);
-      const deltaZ = Math.abs(z - lastZ);
-
-      // Detect shake
-      if (deltaX + deltaY + deltaZ > 30) {
+      const isShake = deltaX + deltaY + deltaZ > 30;
+      if (isShake) {
         changeToRandomColor();
       }
 
-      lastX = x;
-      lastY = y;
-      lastZ = z;
-    };
+      lastAcceleration.current = acceleration;
+    }
+  }, [acceleration, changeToRandomColor]);
 
-    // Handle double-tap 'S' on PC
+  // Handle keyboard for desktop
+  useEffect(() => {
     const handleKeyPress = (event: KeyboardEvent) => {
       if (event.key.toLowerCase() === "s") {
         const currentTime = Date.now();
@@ -69,14 +63,12 @@ const Test10 = () => {
       }
     };
 
-    window.addEventListener("devicemotion", handleMotion);
     window.addEventListener("keydown", handleKeyPress);
 
     return () => {
-      window.removeEventListener("devicemotion", handleMotion);
       window.removeEventListener("keydown", handleKeyPress);
     };
-  }, [lastTapTime, colorHistory]);
+  }, [lastTapTime, changeToRandomColor]);
 
   const textColor =
     color.name === "white" || color.name === "yellow" ? "#000000" : "#ffffff";
@@ -86,6 +78,14 @@ const Test10 = () => {
       className="flex flex-1 flex-col items-center justify-center p-8 transition-colors duration-500"
       style={{ backgroundColor: color.value }}
     >
+      {!permissionGranted && (
+        <button
+          onClick={requestPermission}
+          className="absolute top-8 px-6 py-3 bg-white text-black rounded-lg font-semibold shadow-lg hover:bg-gray-100"
+        >
+          Enable Motion Sensors
+        </button>
+      )}
       <h1
         className="text-6xl font-bold mb-4 capitalize"
         style={{ color: textColor }}

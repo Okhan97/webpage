@@ -1,28 +1,22 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useDeviceOrientation } from "@/utils/useDeviceOrientation";
 
 const Test8 = () => {
-  const [alpha, setAlpha] = useState<number | null>(null);
-  const [beta, setBeta] = useState<number | null>(null);
-  const [gamma, setGamma] = useState<number | null>(null);
-
-  useEffect(() => {
-    const handleOrientation = (event: DeviceOrientationEvent) => {
-      setAlpha(event.alpha);
-      setBeta(event.beta);
-      setGamma(event.gamma);
-    };
-
-    window.addEventListener("deviceorientation", handleOrientation);
-
-    return () => {
-      window.removeEventListener("deviceorientation", handleOrientation);
-    };
-  }, []);
+  const { alpha, beta, gamma, permissionGranted, requestPermission } =
+    useDeviceOrientation();
 
   return (
     <div className="flex flex-1 flex-col items-center justify-center p-8">
+      {!permissionGranted && (
+        <button
+          onClick={requestPermission}
+          className="mb-6 px-6 py-3 bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-semibold"
+        >
+          Enable Motion Sensors
+        </button>
+      )}
+
       <h1 className="text-4xl font-bold mb-8">Motion Sensors</h1>
 
       <div className="space-y-6 text-center">
