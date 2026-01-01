@@ -1,4 +1,5 @@
 {
     "PAGE_NAME": "HSL visualizer",
-    "PAGE_DESCRIPTION": "My take on visualizing the HSL color space"
+    "PAGE_DESCRIPTION": "My take on visualizing the HSL color space",
+    "MOBILE_FOCUSED": false
 }

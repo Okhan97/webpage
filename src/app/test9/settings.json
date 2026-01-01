@@ -1,4 +1,5 @@
 {
     "PAGE_NAME": "Rotating cube",
-    "PAGE_DESCRIPTION": "Tied device motion to cube rotation (kinda)"
+    "PAGE_DESCRIPTION": "Tied device motion to cube rotation (kinda)",
+    "MOBILE_FOCUSED": true
 }

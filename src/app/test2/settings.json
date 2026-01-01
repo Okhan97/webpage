@@ -1,4 +1,5 @@
 {
     "PAGE_NAME": "Circle color randomizer",
-    "PAGE_DESCRIPTION": "Epilepsy warning"
+    "PAGE_DESCRIPTION": "Epilepsy warning",
+    "MOBILE_FOCUSED": false
 }

@@ -1,39 +1,41 @@
 import Link from "next/link";
 import { readdirSync, readFileSync, existsSync } from "fs";
 import { join } from "path";
-import Tooltip from "@mui/material/Tooltip";
+import TestLink from "./TestLink";
+
+const loadTestPageSettings = (folderName: string, settingsPath: string) => {
+  let displayName = folderName.charAt(0).toUpperCase() + folderName.slice(1);
+  let description: string | undefined = undefined;
+  let mobileFocused = false;
+
+  if (existsSync(settingsPath)) {
+    try {
+      const settingsContent = readFileSync(settingsPath, "utf-8");
+      const settings = JSON.parse(settingsContent);
+      if (settings.PAGE_NAME) displayName = settings.PAGE_NAME;
+      if (settings.PAGE_DESCRIPTION) description = settings.PAGE_DESCRIPTION;
+      if (settings.MOBILE_FOCUSED !== undefined)
+        mobileFocused = settings.MOBILE_FOCUSED;
+    } catch (error) {
+      console.error(`Error reading settings for ${folderName}:`, error);
+    }
+  }
+
+  return { folder: folderName, displayName, description, mobileFocused };
+};
 
 const getTestPages = () => {
   try {
     const appDir = join(process.cwd(), "src", "app");
     const entries = readdirSync(appDir, { withFileTypes: true });
 
+    // TODO: I don't like the way the code is structured here, refactor later
     const testPages = entries
       .filter((entry) => entry.isDirectory() && entry.name.startsWith("test"))
       .map((entry) => {
         const folderName = entry.name;
         const settingsPath = join(appDir, folderName, "settings.json");
-
-        let displayName =
-          folderName.charAt(0).toUpperCase() + folderName.slice(1);
-        let description: string | undefined = undefined;
-
-        if (existsSync(settingsPath)) {
-          try {
-            const settingsContent = readFileSync(settingsPath, "utf-8");
-            const settings = JSON.parse(settingsContent);
-            if (settings.PAGE_NAME) {
-              displayName = settings.PAGE_NAME;
-            }
-            if (settings.PAGE_DESCRIPTION) {
-              description = settings.PAGE_DESCRIPTION;
-            }
-          } catch (error) {
-            console.error(`Error reading settings for ${folderName}:`, error);
-          }
-        }
-
-        return { folder: folderName, displayName, description };
+        return loadTestPageSettings(folderName, settingsPath);
       })
       .sort((a, b) => {
         const numA = parseInt(a.folder.replace("test", ""));
@@ -70,18 +72,7 @@ const TestsPage = () => {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
         {testPages.map((testPage) => (
-          <Tooltip
-            key={testPage.folder}
-            title={testPage.description || ""}
-            arrow
-          >
-            <Link
-              href={`/${testPage.folder}`}
-              className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-4 rounded-lg font-semibold transition-colors duration-200 text-center"
-            >
-              {testPage.displayName}
-            </Link>
-          </Tooltip>
+          <TestLink key={testPage.folder} page={testPage} />
         ))}
       </div>
 

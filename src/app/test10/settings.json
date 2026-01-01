@@ -1,4 +1,5 @@
 {
     "PAGE_NAME": "Shake Color",
-    "PAGE_DESCRIPTION": "Shake your device to change the background color"
+    "PAGE_DESCRIPTION": "Shake your device to change the background color",
+    "MOBILE_FOCUSED": true
 }

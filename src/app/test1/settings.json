@@ -1,4 +1,5 @@
 {
     "PAGE_NAME": "Canvas perspective",
-    "PAGE_DESCRIPTION": "A simple example of perspective projection using Canvas 2D"
+    "PAGE_DESCRIPTION": "A simple example of perspective projection using Canvas 2D",
+    "MOBILE_FOCUSED": false
 }
