@@ -1,13 +1,17 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { EffectPipeline } from "./effects";
 import { ParticleEffect } from "./effects/ParticleEffect";
 import { PARTICLE_COUNT } from "./constants";
 
+const MAX_PARTICLES = 400;
+
 const Test11 = () => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const animationRef = useRef<number | null>(null);
+  const [particleCount, setParticleCount] = useState(PARTICLE_COUNT);
+  const particleEffectRef = useRef<ParticleEffect | null>(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -24,7 +28,9 @@ const Test11 = () => {
     window.addEventListener("resize", resize);
 
     const pipeline = new EffectPipeline();
-    pipeline.add(new ParticleEffect(PARTICLE_COUNT));
+    const particleEffect = new ParticleEffect(particleCount);
+    particleEffectRef.current = particleEffect;
+    pipeline.add(particleEffect);
 
     const animate = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -43,9 +49,26 @@ const Test11 = () => {
       pipeline.cleanup();
       window.removeEventListener("resize", resize);
     };
-  }, []);
+  }, [particleCount]);
 
-  return <canvas ref={canvasRef} className="absolute inset-0 h-full w-full" />;
+  return (
+    <>
+      <canvas ref={canvasRef} className="absolute inset-0 h-full w-full" />
+      <div className="absolute top-4 right-4 bg-black/50 backdrop-blur-sm px-4 py-3 rounded-lg border border-white/20">
+        <label className="flex flex-col gap-2 text-white/90 text-sm">
+          <span>Particles: {particleCount}</span>
+          <input
+            type="range"
+            min="0"
+            max={MAX_PARTICLES}
+            value={particleCount}
+            onChange={(e) => setParticleCount(Number(e.target.value))}
+            className="w-48 cursor-pointer"
+          />
+        </label>
+      </div>
+    </>
+  );
 };
 
 export default Test11;

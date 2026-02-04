@@ -11,6 +11,10 @@ export class ParticleEffect implements Effect {
     this.particles = [];
   }
 
+  setParticleCount(count: number): void {
+    this.particleCount = count;
+  }
+
   private initParticles(width: number, height: number): void {
     this.particles = Array.from({ length: this.particleCount }, () =>
       createParticle(width, height)
@@ -18,8 +22,12 @@ export class ParticleEffect implements Effect {
   }
 
   update(width: number, height: number): void {
-    if (this.particles.length === 0) {
-      this.initParticles(width, height);
+    // Adjust particle array size to match target count
+    while (this.particles.length < this.particleCount) {
+      this.particles.push(createParticle(width, height));
+    }
+    while (this.particles.length > this.particleCount) {
+      this.particles.pop();
     }
 
     for (let i = 0; i < this.particles.length; i += 1) {
